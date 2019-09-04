@@ -1,0 +1,9 @@
+EMAIL_USERNAME = '289672494@qq.com'
+EMAIL_PASSWORD = 'euwhbysodgibbjei'
+EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_TITLE = '匿名'
+EMAIL_CONT = '    测试'
+
+
+EMAIL_CONFESSION = '0'

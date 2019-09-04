@@ -1,11 +1,11 @@
 
 DROP TABLE IF EXISTS `emails`;
 CREATE TABLE IF NOT EXISTS `emails` (
+  `email` varchar(22) NOT NULL,
   `send_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `sender_email` varchar(255) NOT NULL,
-  `receiver_email` varchar(255) NOT NULL,
+  `o_email` varchar(22) NOT NULL,
   `cont` text NOT NULL,
-  `status` int(11) NOT NULL COMMENT '0 告白 1 感谢 2 配对成功 3 有对象'
+  `state` int(11) NOT NULL COMMENT '0 告白 1 感谢 2 配对成功 3 有对象'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>Search</title>
+</head>
+<body ontouchstart>
+
+    <form action="." method="post" style="padding-top: 10%;">
+
+        <div class="weui-cells weui-cells_form" >
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入邮箱" type="text" name="email">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入姓名（选填）" type="text" name="name">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+                <div class="weui-cell__bd">
+                    <select name="sex">
+                        <option value ="-1">保密</option>
+                        <option value ="1">男生</option>
+                        <option value="0">女生</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">Ta的邮箱</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="Ta的邮箱" type="text" name="o_email">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">Ta的姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="Ta的姓名（选填）" type="text" name="o_name">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="weui-btn-area">
+            <input class="weui-btn weui-btn_primary" id="btn" type="submit" value="发送">
+        </div>
+
+    </form>
+
+</body>
+</html>

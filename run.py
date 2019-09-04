@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.register_blueprint(view_main)
 
 
-log_init.init(APP_ROOT_PATH)
+log_init.init()
 
 
 @app.route('/')

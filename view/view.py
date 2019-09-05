@@ -1,4 +1,5 @@
 import logging
+from service.tools import json_data
 from flask import Blueprint, render_template, request
 from controller import control
 
@@ -41,7 +42,7 @@ def get_code():
     email = data.get('email', '')
     try:
         control.email_send_code(email)
-        return {'success': True}
+        return json_data({'success': True})
     except Exception as e:
         logger.error(
             'args: %s,  error: %s' % (
@@ -51,14 +52,13 @@ def get_code():
                 str(e)
             )
         )
-        return {'success': False}
+        return json_data({'success': False})
 
 
 @view_main.route('verify_code', methods=['POST'])
 def verify_code():
     data = request.get_json()
     email = data.get('email', '')
-    code = data.get('code', '')
-    return {
+    code = json_data({
         'success': control.verify_code(email, code)
-    }
+    })

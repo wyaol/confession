@@ -1,5 +1,6 @@
 import smtplib
 import random
+import json
 from email.mime.text import MIMEText   # 导入模块
 from config import service_config
 
@@ -33,3 +34,7 @@ def get_code(len: int=6) -> str:
     for i in range(len):
         res += str(random.randint(0, 9))
     return res
+
+
+def json_data(data: dict):
+    return json.dumps(data, ensure_ascii=False)

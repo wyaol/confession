@@ -1,6 +1,7 @@
 
 DROP TABLE IF EXISTS `emails`;
 CREATE TABLE IF NOT EXISTS `emails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(22) NOT NULL,
   `send_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `o_email` varchar(22) NOT NULL,
@@ -28,12 +29,6 @@ CREATE TABLE IF NOT EXISTS `code` (
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `emails`
---
-ALTER TABLE `emails`
-  ADD PRIMARY KEY (`send_time`);
 
 --
 -- Indexes for table `teenagers`

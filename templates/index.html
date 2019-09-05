@@ -21,7 +21,7 @@
             </div>
 
             <div class="weui-btn-area">
-                <div class="weui-btn weui-btn_primary" value="获取验证码" onclick="get_code()">获取验证码</div>
+                <button class="weui-btn weui-btn_primary" value="获取验证码" onclick="get_code(this)">获取验证码</button>
             </div>
 
             <div class="weui-cell">
@@ -101,7 +101,9 @@
             else function_fail();
         }
 
-        function get_code() {
+        function get_code(o) {
+            time(o);
+
             axios.post('get_code', {
                 email: $('#email').val(),
             })
@@ -138,6 +140,24 @@
             setTimeout(function () {
                 $toast.fadeOut(100);
             }, time);
+        }
+
+        var wait=60;
+        function time(o) {
+            if (wait == 0) {
+                o.removeAttribute("disabled");
+                o.innerHTML="获取验证码";
+                wait = 60;
+            } else {
+                o.setAttribute("disabled", true);
+                o.style.backgroundColor = "gray";
+                o.innerHTML=wait+"秒后可以重新发送";
+                wait--;
+                setTimeout(function() {
+                    time(o)
+                },
+                1000)
+            }
         }
     </script>
 </body>

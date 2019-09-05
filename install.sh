@@ -1,0 +1,1 @@
+python3 dao/db_init.py

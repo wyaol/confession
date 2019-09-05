@@ -25,10 +25,41 @@ class EmailSend:
             }
         )
 
-    def if_sender_exist(self, email):
-        res = self.sql_client.select(self.table_name, ['*'], email=email)
-        if len(res) > 0: return True
-        return False
+    def if_exist_sender(self, email):
+        return self.if_exist(self.table_name, email=email)
 
     def add_email(self, email: str, o_email: str, cont: str, state: int):
         self.sql_client.insert('emails', email=email, o_email=o_email, cont=cont, state=state)
+
+    def if_exist_code(self, email):
+        return self.if_exist('code', email=email)
+
+    def if_exist(self, table_name, **kwargs) -> bool:
+        """
+        查找某记录是否存在
+        :param table_name: 表名
+        :param kwargs: 限定条件
+        :return: true false
+        """
+        res = self.sql_client.select(table_name, ['*'], **kwargs)
+        if len(res) > 0: return True
+        return False
+
+    def add_code(self, email, code):
+        self.sql_client.insert('code', email=email, code=code)
+
+    def del_code(self, email):
+        self.sql_client.delete('code', email=email)
+
+    def get_code(self, email):
+        """
+        从数据库中查找验证码
+        :param email: key值
+        :return:
+        """
+        res = self.sql_client.select('code', ['code'], email=email)
+        if len(res) == 0: return ''
+        return res[0][0]
+
+    def if_exist_pair(self, email, o_email):
+        return self.if_exist('emails', email=o_email, o_email=email)

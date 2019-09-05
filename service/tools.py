@@ -1,4 +1,5 @@
 import smtplib
+import random
 from email.mime.text import MIMEText   # 导入模块
 from config import service_config
 
@@ -25,3 +26,10 @@ def send_emil(recv: str, content: str,
     smtp.sendmail(username, recv, msg.as_string())  # 发送邮件
     smtp.quit()
     return True
+
+
+def get_code(len: int=6) -> str:
+    res = ''
+    for i in range(len):
+        res += str(random.randint(0, 9))
+    return res

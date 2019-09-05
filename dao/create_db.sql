@@ -8,12 +8,6 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `state` int(11) NOT NULL COMMENT '0 告白 1 感谢 2 配对成功 3 有对象'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- 表的结构 `teenagers`
---
-
 DROP TABLE IF EXISTS `teenagers`;
 CREATE TABLE IF NOT EXISTS `teenagers` (
   `email` varchar(22) NOT NULL,
@@ -21,6 +15,13 @@ CREATE TABLE IF NOT EXISTS `teenagers` (
   `sex` int(4) NOT NULL DEFAULT '-1' COMMENT '-1 保密 0 女生 1 男生',
   `o_email` varchar(22) NOT NULL,
   `o_name` varchar(255) NOT NULL DEFAULT '',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `code`;
+CREATE TABLE IF NOT EXISTS `code` (
+  `email` varchar(22) NOT NULL PRIMARY KEY,
+  `code` varchar(22) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

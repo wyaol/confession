@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <title>Search</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/static/js/jquery.js"></script>
+    <title>Index</title>
 </head>
 <body ontouchstart>
 
@@ -14,7 +16,18 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入邮箱" type="text" name="email">
+                    <input class="weui-input" placeholder="请输入邮箱" type="email" name="email" id="email" required/>
+                </div>
+            </div>
+
+            <div class="weui-btn-area">
+                <div class="weui-btn weui-btn_primary" value="获取验证码" onclick="get_code()">获取验证码</div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入验证码" type="text" name="code" id="code">
                 </div>
             </div>
 
@@ -40,7 +53,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">Ta的邮箱</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="Ta的邮箱" type="text" name="o_email">
+                    <input class="weui-input" placeholder="Ta的邮箱" type="email" name="o_email" required/>
                 </div>
             </div>
 
@@ -59,5 +72,73 @@
 
     </form>
 
+     <div style="margin: auto; margin-top: 20%;">
+        	<h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.邮箱是配对的重要信息，请填写Ta最熟悉的邮箱，最好是QQ邮箱</h4>
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.开发者不是黑客，有问题欢迎联系开发者qq：289672494</h4>
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.从10月7号开始。每个月只能发送一次， 超过5次会被标记为渣男/渣女哦</h4>
+     </div>
+
+    <!--BEGIN toast-->
+    <div id="toast" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-info-circle weui-icon_toast"></i>
+            <p class="weui-toast__content" id="toast_value">已完成</p>
+        </div>
+    </div>
+    <!--end toast-->
+
+    <script>
+        $('input').blur(function(event) {
+            event.target.checkValidity();
+        }).bind('invalid', function(event) {
+            show_toast('格式不正确', 500);
+            setTimeout(function() { $(event.target).focus();}, 50);
+        });
+
+        function deal_response(response, function_success, function_fail) {
+            if (response.data.hasOwnProperty('success') && response.data.success === true) function_success();
+            else function_fail();
+        }
+
+        function get_code() {
+            axios.post('get_code', {
+                email: $('#email').val(),
+            })
+            .then(function (response) {
+                deal_response(response, function () {
+                    show_toast('验证码发送成功');
+                }, function () {
+                    show_toast('验证码发送失败');
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        function verify_code() {
+            axios.post('verify_code', {
+                code: $('#code').val(),
+                email: $('#email').val(),
+            })
+            .then(function (response) {
+                show_toast(response.data.success);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        function show_toast(cont, time=2000) {
+            var $toast = $('#toast');
+            if ($toast.css('display') != 'none') return;
+            $('#toast_value').text(cont)
+            $toast.fadeIn(100);
+            setTimeout(function () {
+                $toast.fadeOut(100);
+            }, time);
+        }
+    </script>
 </body>
 </html>

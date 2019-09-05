@@ -19,7 +19,6 @@ class SQL:
         self.cursor = self.conn.cursor()
 
     def insert(self, table_name, **kwargs):
-        print(kwargs)
         sql = 'insert into %s (%s) values (%s)'%(table_name,
                                                  SQL.keys2str(list(kwargs.keys())),
                                                  SQL.values2str(list(kwargs.values())))

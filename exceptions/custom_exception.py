@@ -1,0 +1,2 @@
+class CodeVerifyFailException(Exception):
+    pass

@@ -1,3 +1,4 @@
+import time
 from service.tools import send_emil, get_code
 from config.service_config import EMAIL_CONT, EMAIL_CONFESSION, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE
 from dao.email_send_db import EmailSend
@@ -32,7 +33,9 @@ def check_sender_info(email):
 
 
 def email_send_congratulate(email, o_email):
+    time.sleep(1)
     send_emil(email, EMAIL_CONT_CONGRATULATE)
+    time.sleep(1)
     send_emil(o_email, EMAIL_CONT_CONGRATULATE)
     email_send = EmailSend()
     email_send.add_email(email, o_email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)

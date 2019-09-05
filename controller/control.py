@@ -33,8 +33,10 @@ def check_sender_info(email):
 
 def email_send_congratulate(email, o_email):
     send_emil(email, EMAIL_CONT_CONGRATULATE)
+    send_emil(o_email, EMAIL_CONT_CONGRATULATE)
     email_send = EmailSend()
     email_send.add_email(email, o_email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)
+    email_send.add_email(o_email, email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)
 
 
 def email_send_code(email):

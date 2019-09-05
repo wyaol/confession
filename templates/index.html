@@ -150,13 +150,13 @@
         var wait=60;
         function time(o) {
             if (wait == 0) {
-                o.style.backgroundColor = 'green';
+                o.style.backgroundColor = '#1aad19';
                 o.removeAttribute("disabled");
                 o.innerHTML="获取验证码";
                 wait = 60;
             } else {
                 o.setAttribute("disabled", true);
-                o.style.backgroundColor = "gray";
+                o.style.backgroundColor = "grey";
                 o.innerHTML=wait+"秒后可以重新发送";
                 wait--;
                 setTimeout(function() {

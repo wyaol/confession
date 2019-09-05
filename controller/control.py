@@ -23,7 +23,7 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
         email_send.update_email_sender(email, name, sex, o_email, o_name)
 
     if email_send.if_exist_pair(email, o_email):
-        email_send_congratulate(email, name, sex, o_email, o_name)
+        email_send_congratulate(email, o_email)
     return True
 
 
@@ -31,7 +31,7 @@ def check_sender_info(email):
     pass
 
 
-def email_send_congratulate(email, name, sex, o_email, o_name):
+def email_send_congratulate(email, o_email):
     send_emil(email, EMAIL_CONT_CONGRATULATE)
     email_send = EmailSend()
     email_send.add_email(email, o_email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)

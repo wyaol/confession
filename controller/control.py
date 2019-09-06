@@ -7,7 +7,7 @@ from exceptions.custom_exception import CodeVerifyFailException, BlockTimeExcept
 CODE_VERIFY_FAIL = '验证码校验失败'
 
 
-def email_send_confession(email, name, sex, o_email, o_name, code):
+def email_send_info(email, name, sex, o_email, o_name, code):
     check_sender_info(email)
 
     email_send = EmailSend()
@@ -19,16 +19,20 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
 
     if email_send.if_exist_pair(email, o_email):
         email_send_congratulate(email, o_email)
-        return True
+    else:
+        email_send_confession(email, name, sex, o_email, o_name)
 
+    return True
+
+
+def email_send_confession(email, name, sex, o_email, o_name):
+    email_send = EmailSend()
     send_emil(o_email, service_config.EMAIL_CONT)
     email_send.add_email(email, o_email, service_config.EMAIL_CONT, service_config.EMAIL_CONFESSION)
     if email_send.if_exist_sender(email) is False:
         email_send.add_email_sender(email, name, sex, o_email, o_name)
     else:
         email_send.update_email_sender(email, name, sex, o_email, o_name)
-
-    return True
 
 
 def check_sender_info(email):
@@ -41,8 +45,7 @@ def email_send_congratulate(email, o_email):
     send_emil(email, service_config.EMAIL_CONT_CONGRATULATE)
     send_emil(o_email, service_config.EMAIL_CONT_CONGRATULATE)
     email_send = EmailSend()
-    email_send.add_email(service_config.EMAIL_USERNAME, o_email, service_config.EMAIL_CONT_CONGRATULATE, service_config.EMAIL_CONGRATULATE)
-    email_send.add_email(service_config.EMAIL_USERNAME, email, service_config.EMAIL_CONT_CONGRATULATE, service_config.EMAIL_CONGRATULATE)
+    email_send.add_email(email, o_email, service_config.EMAIL_CONT_CONGRATULATE, service_config.EMAIL_CONGRATULATE)
 
 
 def email_send_code(email):

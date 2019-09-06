@@ -25,7 +25,7 @@ def index():
         o_name = data.get('o_name', '')
         code = data.get('code', '')
         try:
-            control.email_send_confession(email, name, sex, o_email, o_name, code)
+            control.email_send_info(email, name, sex, o_email, o_name, code)
             return json_data({
                 'success': True,
                 'code': service_config.CODE_SUCCESS

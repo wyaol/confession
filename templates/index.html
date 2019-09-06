@@ -130,7 +130,9 @@
                 .then(function (response) {
                     if (response.data.hasOwnProperty('code') && response.data.code == CODE_BLOCK) {
                         msg = '距离下次可发送的时间还有' + formatSeconds(response.data.block_time);
-                        show_toast(msg, response.data.block_time);
+                        showLoading();
+                        $('#toast_value').text(msg);
+                        $('#toast')[0].style.display = 'block';
 
                         let time = response.data.block_time;
 
@@ -140,6 +142,10 @@
 
                             setTimeout(function () {
                                 if (time > 0) caculate(time-1);
+                                else {
+                                    completeLoading();
+                                    $('#toast')[0].style.display = 'none';
+                                }
                             }, 1000);
                         }
 
@@ -213,23 +219,26 @@
             }, time);
         }
 
-        var wait=60;
         function time(o) {
-            if (wait == 0) {
-                o.style.backgroundColor = '#1aad19';
-                o.removeAttribute("disabled");
-                o.innerHTML="获取验证码";
-                wait = 60;
-            } else {
-                o.setAttribute("disabled", true);
-                o.style.backgroundColor = "grey";
-                o.innerHTML=wait+"秒后可以重新发送";
-                wait--;
-                setTimeout(function() {
-                    time(o)
-                },
-                1000)
+            function grey(o, record_time, all_time=60) {
+                let current_time = new Date();
+                let rest_time = parseInt(all_time - (current_time - record_time) / 1000);
+                if (rest_time <= 0) {
+                    o.style.backgroundColor = '#1aad19';
+                    o.removeAttribute("disabled");
+                    o.innerHTML="获取验证码";
+                } else {
+                    o.setAttribute("disabled", true);
+                    o.style.backgroundColor = "grey";
+                    o.innerHTML = rest_time + "秒后可以重新发送";
+                    setTimeout(function () {
+                        grey(o, record_time);
+                    }, 1000);
+                }
             }
+
+            let record_time = new Date();
+            grey(o, record_time);
         }
 
         function formatSeconds(value) {
@@ -259,6 +268,21 @@
 	        }
 	        return result;
 	    }
+
+        //在页面未加载完毕之前显示的loading Html自定义内容
+        var _LoadingHtml = '<div id="loadingDiv" style="display: none; "><div id="over" style="position: fixed;top: 0; bottom: 0;right: 0;left: 0;background-color: #f5f5f5;opacity: 0.5;z-index: 1000;"></div><div id="layout" style="height: 30%;width: 30%;position: fixed;left: 40%;top: 45%;margin-left: -16px;margin-top: -16px;z-index: 1001;"></div></div>';
+        //呈现loading效果
+        document.write(_LoadingHtml);
+
+        //移除loading效果
+        function completeLoading() {
+                document.getElementById("loadingDiv").style.display="none";
+        }
+        //展示loading效果
+        function showLoading()
+        {
+            document.getElementById("loadingDiv").style.display="block";
+        }
     </script>
 </body>
 </html>

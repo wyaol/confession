@@ -1,6 +1,6 @@
 import datetime
 from service.tools import send_emil, get_code
-from config.service_config import EMAIL_CONT, EMAIL_CONFESSION, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE, BLOCK_TIME
+from config import service_config
 from dao.email_send_db import EmailSend
 from exceptions.custom_exception import CodeVerifyFailException, BlockTimeException
 
@@ -21,8 +21,8 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
         email_send_congratulate(email, o_email)
         return True
 
-    send_emil(o_email, EMAIL_CONT)
-    email_send.add_email(email, o_email, EMAIL_CONT, EMAIL_CONFESSION)
+    send_emil(o_email, service_config.EMAIL_CONT)
+    email_send.add_email(email, o_email, service_config.EMAIL_CONT, service_config.EMAIL_CONFESSION)
     if email_send.if_exist_sender(email) is False:
         email_send.add_email_sender(email, name, sex, o_email, o_name)
     else:
@@ -32,17 +32,17 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
 
 
 def check_sender_info(email):
-    rest_time = get_rest_block_time(email, BLOCK_TIME)
+    rest_time = get_rest_block_time(email, service_config.BLOCK_TIME)
     if rest_time != 0:
         raise BlockTimeException(rest_time, '您当前处于冻结时间')
 
 
 def email_send_congratulate(email, o_email):
-    send_emil(email, EMAIL_CONT_CONGRATULATE)
-    send_emil(o_email, EMAIL_CONT_CONGRATULATE)
+    send_emil(email, service_config.EMAIL_CONT_CONGRATULATE)
+    send_emil(o_email, service_config.EMAIL_CONT_CONGRATULATE)
     email_send = EmailSend()
-    email_send.add_email(email, o_email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)
-    email_send.add_email(o_email, email, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE)
+    email_send.add_email(service_config.EMAIL_USERNAME, o_email, service_config.EMAIL_CONT_CONGRATULATE, service_config.EMAIL_CONGRATULATE)
+    email_send.add_email(service_config.EMAIL_USERNAME, email, service_config.EMAIL_CONT_CONGRATULATE, service_config.EMAIL_CONGRATULATE)
 
 
 def email_send_code(email):

@@ -17,7 +17,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入邮箱" type="email" name="email" id="email" required/>
+                    <input class="weui-input" placeholder="请输入邮箱" type="email" id="email" required/>
                 </div>
             </div>
 
@@ -28,21 +28,21 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入验证码" type="text" name="code" id="code">
+                    <input class="weui-input" placeholder="请输入验证码" type="text" id="code">
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入姓名（选填）" type="text" name="name">
+                    <input class="weui-input" placeholder="请输入姓名（选填）" type="text" id="name">
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
                 <div class="weui-cell__bd">
-                    <select name="sex">
+                    <select id="sex">
                         <option value ="-1">保密</option>
                         <option value ="1">男生</option>
                         <option value="0">女生</option>
@@ -54,21 +54,21 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">Ta的邮箱</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="Ta的邮箱" type="email" name="o_email" required/>
+                    <input class="weui-input" placeholder="Ta的邮箱" type="email" id="o_email" required/>
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">Ta的姓名</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" placeholder="Ta的姓名（选填）" type="text" name="o_name">
+                    <input class="weui-input" placeholder="Ta的姓名（选填）" type="text" id="o_name">
                 </div>
             </div>
 
         </div>
 
         <div class="weui-btn-area">
-            <input class="weui-btn weui-btn_primary" id="btn" type="submit" value="发送">
+            <div class="weui-btn weui-btn_primary" value="发送" onclick="submit()">发送</div>
         </div>
 
     </form>
@@ -97,16 +97,58 @@
             // setTimeout(function() { $(event.target).focus();}, 50);
         });
 
-        function deal_response(response, function_success, function_fail) {
-            if (response.data.hasOwnProperty('success') && response.data.success === true) function_success();
-            else function_fail();
+        function check_deal_empty_input(selector, desc='') {
+            if (selector.val() == '') {
+                show_toast(desc);
+                selector.focus();
+                return true;
+            }
+            return false;
+        }
+
+        function check_input() {
+            if (check_deal_empty_input($('#email'), '邮箱不能为空') === true) return false;
+            if (check_deal_empty_input($('#o_email'), '邮箱不能为空') === true) return false;
+            if (check_deal_empty_input($('#code'), '验证码不能为空') === true) return false;
+            return true;
+        }
+
+        function submit() {
+            if (check_input() === false) return;
+
+            verify_code(function () {
+                axios.post('.', {
+                    code: $('#code').val(),
+                    email: $('#email').val(),
+                    name: $('#name').val(),
+                    o_email: $('#o_email').val(),
+                    o_name: $('#o_name').val(),
+                    sex: $('#sex').val(),
+                })
+                .then(function (response) {
+                    deal_response(response, function () {
+                        location.href = 'success';
+                    }, function () {
+                        show_toast('发送邮件失败');
+                    });
+                })
+                .catch(function (error) {
+                    show_toast('发送邮件失败');
+                    console.log(error);
+                });
+            }, function () {
+                show_toast('验证失败');
+            });
+        }
+
+        function deal_response(response, function_success=null, function_fail=null) {
+            if (response.data.hasOwnProperty('success') && response.data.success === true && function_success != null) function_success();
+            else if (function_fail != null) function_fail();
+            else ;
         }
 
         function get_code(o) {
-            if ($('#email').val() == '') {
-                show_toast('邮箱不能为空');
-                return;
-            }
+            if (check_deal_empty_input($('#email'), '邮箱不能为空') === true) return;
 
             time(o);
 
@@ -125,15 +167,17 @@
             });
         }
 
-        function verify_code() {
+        function verify_code(callback_func_success=null, callback_func_fail=null) {
             axios.post('verify_code', {
                 code: $('#code').val(),
                 email: $('#email').val(),
             })
             .then(function (response) {
-                show_toast(response.data.success);
+                deal_response(response, callback_func_success, callback_func_fail);
             })
             .catch(function (error) {
+                if (callback_func_fail != null)
+                    callback_func_fail();
                 console.log(error);
             });
         }

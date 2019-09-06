@@ -4,7 +4,6 @@ from config.service_config import EMAIL_CONT, EMAIL_CONFESSION, EMAIL_CONT_CONGR
 from dao.email_send_db import EmailSend
 from exceptions.custom_exception import CodeVerifyFailException
 
-
 CODE_VERIFY_FAIL = '验证码校验失败'
 
 
@@ -16,6 +15,10 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
     else:
         email_send.del_code(email)
 
+    if email_send.if_exist_pair(email, o_email):
+        email_send_congratulate(email, o_email)
+        return True
+
     send_emil(o_email, EMAIL_CONT)
     email_send.add_email(email, o_email, EMAIL_CONT, EMAIL_CONFESSION)
     if email_send.if_exist_sender(email) is False:
@@ -23,8 +26,6 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
     else:
         email_send.update_email_sender(email, name, sex, o_email, o_name)
 
-    if email_send.if_exist_pair(email, o_email):
-        email_send_congratulate(email, o_email)
     return True
 
 
@@ -53,4 +54,4 @@ def email_send_code(email):
 def verify_code(email, code):
     email_send = EmailSend()
     db_code = email_send.get_code(email)
-    return code == db_code
+    return code == db_code and code != ''

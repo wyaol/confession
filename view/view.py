@@ -15,15 +15,18 @@ def index():
     if request.method == 'GET':
         return render_template('index.html')
     elif request.method == 'POST':
-        email = request.form.get('email', '')
-        name = request.form.get('name', '')
-        sex = request.form.get('sex', '')
-        o_email = request.form.get('o_email', '')
-        o_name = request.form.get('o_name', '')
-        code = request.form.get('code', '')
+        data = request.get_json()
+        email = data.get('email', '')
+        name = data.get('name', '')
+        sex = data.get('sex', '')
+        o_email = data.get('o_email', '')
+        o_name = data.get('o_name', '')
+        code = data.get('code', '')
         try:
             control.email_send_confession(email, name, sex, o_email, o_name, code)
-            return render_template('success.html')
+            return json_data({
+                'success': True
+            })
         except Exception as e:
             logger.error('args: %s, error info: %s', str({
                 'email': email,
@@ -32,8 +35,10 @@ def index():
                 'o_email': o_email,
                 'o_name': o_name
             }), str(e))
-            return render_template('error.html', error=str(e))
-    return render_template('error.html',)
+            return json_data({
+                'success': False,
+                'message': str(e)
+            })
 
 
 @view_main.route('/get_code', methods=['POST'])
@@ -59,6 +64,12 @@ def get_code():
 def verify_code():
     data = request.get_json()
     email = data.get('email', '')
-    code = json_data({
+    code = data.get('code', '')
+    return json_data({
         'success': control.verify_code(email, code)
     })
+
+
+@view_main.route('success', methods=['GET'])
+def success():
+    return render_template('success.html')

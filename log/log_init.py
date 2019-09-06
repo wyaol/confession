@@ -8,7 +8,7 @@ def init():
 
 
 def add_logger(logger_name: str, log_name: str):
-    formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
+    formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
     logger = logging.getLogger(logger_name)
     handle = logging.FileHandler('log/%s' % (log_name))
     handle.setFormatter(formatter)

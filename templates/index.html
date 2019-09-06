@@ -90,6 +90,8 @@
      </div>
 
     <script>
+        var CODE_BLOCK = 5
+
         $('input').blur(function(event) {
             event.target.checkValidity();
         }).bind('invalid', function(event) {
@@ -126,11 +128,16 @@
                     sex: $('#sex').val(),
                 })
                 .then(function (response) {
-                    deal_response(response, function () {
-                        location.href = 'success';
-                    }, function () {
-                        show_toast('发送邮件失败');
-                    });
+                    if (response.data.hasOwnProperty('code') && response.data.code == CODE_BLOCK) {
+                        msg = '距离下次可发送的时间还有' + response.data.block_time + '秒';
+                        show_toast(msg, response.data.block_time);
+                    } else {
+                        deal_response(response, function () {
+                            location.href = 'success';
+                        }, function () {
+                            show_toast('邮件发送失败');
+                        });
+                    }
                 })
                 .catch(function (error) {
                     show_toast('发送邮件失败');

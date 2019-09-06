@@ -1,13 +1,15 @@
-import time
+import datetime
 from service.tools import send_emil, get_code
-from config.service_config import EMAIL_CONT, EMAIL_CONFESSION, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE
+from config.service_config import EMAIL_CONT, EMAIL_CONFESSION, EMAIL_CONT_CONGRATULATE, EMAIL_CONGRATULATE, BLOCK_TIME
 from dao.email_send_db import EmailSend
-from exceptions.custom_exception import CodeVerifyFailException
+from exceptions.custom_exception import CodeVerifyFailException, BlockTimeException
 
 CODE_VERIFY_FAIL = '验证码校验失败'
 
 
 def email_send_confession(email, name, sex, o_email, o_name, code):
+    check_sender_info(email)
+
     email_send = EmailSend()
 
     if verify_code(email, code) is False:
@@ -30,7 +32,9 @@ def email_send_confession(email, name, sex, o_email, o_name, code):
 
 
 def check_sender_info(email):
-    pass
+    rest_time = get_rest_block_time(email, BLOCK_TIME)
+    if rest_time != 0:
+        raise BlockTimeException(rest_time, '您当前处于冻结时间')
 
 
 def email_send_congratulate(email, o_email):
@@ -55,3 +59,19 @@ def verify_code(email, code):
     email_send = EmailSend()
     db_code = email_send.get_code(email)
     return code == db_code and code != ''
+
+
+def get_rest_block_time(email, block_time) -> int:
+    """
+    获取剩余的冻结时间 s
+    :param email: 这次发送的邮件
+    :param block_time: 设定的冻结时间
+    :return: 秒
+    """
+    email_send = EmailSend()
+    time_last = email_send.get_current_send_timestamp(email)
+    time_current = datetime.datetime.now()
+    time_long = time_current - time_last
+    if block_time <= time_long.seconds: return 0
+    res = datetime.timedelta(seconds=block_time) - time_long
+    return res.seconds

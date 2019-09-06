@@ -63,3 +63,9 @@ class EmailSend:
 
     def if_exist_pair(self, email, o_email):
         return self.if_exist('emails', email=o_email, o_email=email)
+    
+    def get_current_send_timestamp(self, email):
+        self.sql_client.cursor.execute("select send_time from emails where email = '%s' order by send_time desc" % (email))
+        res = self.sql_client.cursor.fetchall()
+        if len(res) == 0: return 0
+        return res[0][0]

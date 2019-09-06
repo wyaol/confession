@@ -10,3 +10,11 @@ EMAIL_CONT_CONGRATULATE = '    你喜欢的人也喜欢你呢'
 
 EMAIL_CONFESSION = '0'
 EMAIL_CONGRATULATE = '2'
+
+
+BLOCK_TIME = 24 * 60 * 60 #距离上次发送邮件的时间间隔不得低于24小时
+
+
+CODE_BLOCK = 5
+CODE_SUCCESS = 0
+CODE_FAIL = 1

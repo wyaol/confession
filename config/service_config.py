@@ -1,5 +1,7 @@
-EMAIL_USERNAME = '289672494@qq.com'
-EMAIL_PASSWORD = 'euwhbysodgibbjei'
+# EMAIL_USERNAME = '289672494@qq.com'
+# EMAIL_PASSWORD = 'euwhbysodgibbjei'
+EMAIL_USERNAME = '2093556881@qq.com'
+EMAIL_PASSWORD = 'gvhculwcmmktbegg'
 EMAIL_PORT = 465
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_TITLE = 'System'

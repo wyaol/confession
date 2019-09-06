@@ -70,6 +70,7 @@ def get_rest_block_time(email, block_time) -> int:
     """
     email_send = EmailSend()
     time_last = email_send.get_current_send_timestamp(email)
+    if time_last == 0: return 0
     time_current = datetime.datetime.now()
     time_long = time_current - time_last
     if block_time <= time_long.total_seconds(): return 0
